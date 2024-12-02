@@ -8,76 +8,14 @@
  * Copyright Contributors to the Zowe Project.
  *
  */
+import { commands as cmds, ExtensionContext, Hover, languages, ProgressLocation, TreeItemCollapsibleState, window } from "vscode";
 
-import { getDisableProgramCommand } from "./commands/disableCommands/disableProgramCommand";
-import { getRemoveSessionCommand } from "./commands/removeSessionCommand";
-import { getEnableProgramCommand } from "./commands/enableCommands/enableProgramCommand";
-import { getAddSessionCommand } from "./commands/addSessionCommand";
-import { getNewCopyCommand } from "./commands/newCopyCommand";
-import { ExtensionContext, ProgressLocation, TreeItemCollapsibleState, window } from "vscode";
-import { getPhaseInCommand } from "./commands/phaseInCommand";
-import {
-  getShowProgramAttributesCommand,
-  getShowLibraryAttributesCommand,
-  getShowLibraryDatasetsAttributesCommand,
-  getShowTCPIPServiceAttributesCommand,
-  getShowURIMapAttributesCommand,
-  getShowRegionAttributes,
-  getShowTransactionAttributesCommand,
-  getShowLocalFileAttributesCommand,
-  getShowTaskAttributesCommand,
-  getShowPipelineAttributesCommand,
-  getShowWebServiceAttributesCommand,
-} from "./commands/showAttributesCommand";
-import { getShowRegionSITParametersCommand } from "./commands/showParameterCommand";
-import {
-  getFilterProgramsCommand,
-  getFilterDatasetProgramsCommand,
-  getFilterLibrariesCommand,
-  getFilterDatasetsCommand,
-  getFilterTransactionCommand,
-  getFilterLocalFilesCommand,
-  getFilterTasksCommand,
-  getFilterTCPIPSCommand,
-  getFilterURIMapsCommand,
-  getFilterPipelinesCommand,
-  getFilterWebServicesCommand,
-} from "./commands/filterResourceCommands";
-import { ProfileManagement } from "./utils/profileManagement";
-import { CICSTree } from "./trees/CICSTree";
-import { getClearResourceFilterCommand } from "./commands/clearResourceFilterCommand";
-import { getFilterPlexResources } from "./commands/getFilterPlexResources";
-import { getClearPlexFilterCommand } from "./commands/clearPlexFilterCommand";
-import { getRefreshCommand } from "./commands/refreshCommand";
-import { getUpdateSessionCommand } from "./commands/updateSessionCommand";
-import { getDeleteSessionCommand } from "./commands/deleteSessionCommand";
-import { getDisableTransactionCommand } from "./commands/disableCommands/disableTransactionCommand";
-import { getEnableTransactionCommand } from "./commands/enableCommands/enableTransactionCommand";
-import { getEnableLocalFileCommand } from "./commands/enableCommands/enableLocalFileCommand";
-import { getDisableLocalFileCommand } from "./commands/disableCommands/disableLocalFileCommand";
-import { getCloseLocalFileCommand } from "./commands/closeLocalFileCommand";
-import { getOpenLocalFileCommand } from "./commands/openLocalFileCommand";
+import axios from 'axios';
+import commands from "./commands";
 import { CICSSessionTree } from "./trees/CICSSessionTree";
-import { viewMoreCommand } from "./commands/viewMoreCommand";
-import {
-  getFilterAllProgramsCommand,
-  getFilterAllLibrariesCommand,
-  getFilterAllTransactionsCommand,
-  getFilterAllLocalFilesCommand,
-  getFilterAllURIMapsCommand,
-  getFilterAllTCPIPServicesCommand,
-  getFilterAllTasksCommand,
-  getFilterAllPipelinesCommand,
-  getFilterAllWebServicesCommand,
-} from "./commands/filterAllResourceCommand";
+import { CICSTree } from "./trees/CICSTree";
+import { plexExpansionHandler, regionContainerExpansionHandler, sessionExpansionHandler } from "./utils/expansionHandler";
 import { getIconPathInResources, setIconClosed } from "./utils/profileUtils";
-import { plexExpansionHandler, sessionExpansionHandler, regionContainerExpansionHandler } from "./utils/expansionHandler";
-import { getZoweExplorerVersion } from "./utils/workspaceUtils";
-
-import { getInquireTransactionCommand } from "./commands/inquireTransaction";
-import { getPurgeTaskCommand } from "./commands/purgeTaskCommand";
-import { getInquireProgramCommand } from "./commands/inquireProgram";
-import { Logger } from "@zowe/imperative";
 
 /**
  * Initializes the extension
@@ -479,72 +417,164 @@ export async function activate(context: ExtensionContext) {
   });
 
   context.subscriptions.push(
-    getAddSessionCommand(treeDataProv),
-    getRemoveSessionCommand(treeDataProv, treeview),
-    getUpdateSessionCommand(treeDataProv, treeview),
-    getDeleteSessionCommand(treeDataProv, treeview),
+    commands.getAddSessionCommand(treeDataProv),
+    commands.getRemoveSessionCommand(treeDataProv, treeview),
+    commands.getUpdateSessionCommand(treeDataProv, treeview),
+    commands.getDeleteSessionCommand(treeDataProv, treeview),
 
-    getRefreshCommand(treeDataProv),
+    commands.getRefreshCommand(treeDataProv),
 
-    getNewCopyCommand(treeDataProv, treeview),
-    getPhaseInCommand(treeDataProv, treeview),
+    commands.getNewCopyCommand(treeDataProv, treeview),
+    commands.getPhaseInCommand(treeDataProv, treeview),
 
-    getEnableProgramCommand(treeDataProv, treeview),
-    getDisableProgramCommand(treeDataProv, treeview),
-    getEnableTransactionCommand(treeDataProv, treeview),
-    getDisableTransactionCommand(treeDataProv, treeview),
-    getEnableLocalFileCommand(treeDataProv, treeview),
-    getDisableLocalFileCommand(treeDataProv, treeview),
+    commands.getEnableProgramCommand(treeDataProv, treeview),
+    commands.getDisableProgramCommand(treeDataProv, treeview),
+    commands.getEnableTransactionCommand(treeDataProv, treeview),
+    commands.getDisableTransactionCommand(treeDataProv, treeview),
+    commands.getEnableLocalFileCommand(treeDataProv, treeview),
+    commands.getDisableLocalFileCommand(treeDataProv, treeview),
 
-    getCloseLocalFileCommand(treeDataProv, treeview),
-    getOpenLocalFileCommand(treeDataProv, treeview),
+    commands.getCloseLocalFileCommand(treeDataProv, treeview),
+    commands.getOpenLocalFileCommand(treeDataProv, treeview),
 
-    getPurgeTaskCommand(treeDataProv, treeview),
+    commands.getPurgeTaskCommand(treeDataProv, treeview),
 
-    getShowRegionAttributes(treeview),
-    getShowProgramAttributesCommand(treeview),
-    getShowLibraryAttributesCommand(treeview),
-    getShowLibraryDatasetsAttributesCommand(treeview),
-    getShowTCPIPServiceAttributesCommand(treeview),
-    getShowURIMapAttributesCommand(treeview),
-    getShowTransactionAttributesCommand(treeview),
-    getShowLocalFileAttributesCommand(treeview),
-    getShowTaskAttributesCommand(treeview),
-    getShowPipelineAttributesCommand(treeview),
-    getShowWebServiceAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowRegionAttributes(treeview),
+    commands.showAttributesCommand.getShowProgramAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowLibraryAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowLibraryDatasetsAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowTCPIPServiceAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowURIMapAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowTransactionAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowLocalFileAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowTaskAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowPipelineAttributesCommand(treeview),
+    commands.showAttributesCommand.getShowWebServiceAttributesCommand(treeview),
 
-    getShowRegionSITParametersCommand(treeview),
+    commands.getShowRegionSITParametersCommand(treeview),
 
-    getFilterProgramsCommand(treeDataProv, treeview),
-    getFilterDatasetProgramsCommand(treeDataProv, treeview),
-    getFilterLibrariesCommand(treeDataProv, treeview),
-    getFilterDatasetsCommand(treeDataProv, treeview),
-    getFilterTransactionCommand(treeDataProv, treeview),
-    getFilterLocalFilesCommand(treeDataProv, treeview),
-    getFilterTasksCommand(treeDataProv, treeview),
-    getFilterTCPIPSCommand(treeDataProv, treeview),
-    getFilterURIMapsCommand(treeDataProv, treeview),
-    getFilterPipelinesCommand(treeDataProv, treeview),
-    getFilterWebServicesCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterProgramsCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterDatasetProgramsCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterLibrariesCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterDatasetsCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterTransactionCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterLocalFilesCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterTasksCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterTCPIPSCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterURIMapsCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterPipelinesCommand(treeDataProv, treeview),
+    commands.filterResourceCommands.getFilterWebServicesCommand(treeDataProv, treeview),
 
-    getFilterAllProgramsCommand(treeDataProv, treeview),
-    getFilterAllLibrariesCommand(treeDataProv, treeview),
-    getFilterAllWebServicesCommand(treeDataProv, treeview),
-    getFilterAllPipelinesCommand(treeDataProv, treeview),
-    getFilterAllTransactionsCommand(treeDataProv, treeview),
-    getFilterAllLocalFilesCommand(treeDataProv, treeview),
-    getFilterAllTasksCommand(treeDataProv, treeview),
-    getFilterAllTCPIPServicesCommand(treeDataProv, treeview),
-    getFilterAllURIMapsCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllProgramsCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllLibrariesCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllWebServicesCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllPipelinesCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllTransactionsCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllLocalFilesCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllTasksCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllTCPIPServicesCommand(treeDataProv, treeview),
+    commands.filterAllResourceCommand.getFilterAllURIMapsCommand(treeDataProv, treeview),
 
-    getFilterPlexResources(treeDataProv, treeview),
+    commands.getFilterPlexResources(treeDataProv, treeview),
 
-    getClearResourceFilterCommand(treeDataProv, treeview),
-    getClearPlexFilterCommand(treeDataProv, treeview),
+    commands.getClearResourceFilterCommand(treeDataProv, treeview),
+    commands.getClearPlexFilterCommand(treeDataProv, treeview),
 
-    viewMoreCommand(treeDataProv, treeview),
+    commands.viewMoreCommand(treeDataProv, treeview),
 
-    getInquireTransactionCommand(treeDataProv, treeview),
-    getInquireProgramCommand(treeDataProv, treeview)
+    commands.getInquireTransactionCommand(treeDataProv, treeview),
+    commands.getInquireProgramCommand(treeDataProv, treeview),
+
+    languages.registerHoverProvider('cobol', {
+      async provideHover(document, position, token) {
+        const text = document.getText();
+        const hoverPositionOffset = document.offsetAt(position);
+        const regex = /(?:WRITEQ|READQ)\s+TS\s+QUEUE\(\s*([^)]+?)\s*\)/g;
+
+
+        let match: any = null;
+        let output = null;
+        while ((match = regex.exec(text)) !== null) {
+          const command = match[0].startsWith("WRITEQ") ? "WRITEQ TS QUEUE" : "READQ TS QUEUE";
+          const queueName = match[1].trim();
+          const startOffset = match.index;
+          const endOffset = regex.lastIndex;
+
+          if (hoverPositionOffset >= startOffset && hoverPositionOffset <= endOffset) {
+            output = { command, queueName };
+          }
+        }
+
+        if (output) {
+          const { command, queueName } = output;
+
+            // Hit servlet to get TSQ content
+          const res = await axios.get(`CMCI ENDPOINT /read?queue=${queueName.replaceAll("'", "")}`);
+
+          console.log(res.data);
+
+          if (res.data && res.data.content) {
+            window.showInformationMessage(res.data.content.join(", "));
+            return new Hover(
+              [
+                `# ${queueName.replaceAll("'", "")}`,
+                ...res.data.content.map((item: string) => `- ${item.trim()}`)
+              ]
+            );
+          }
+          return new Hover(
+            [
+              `# ${queueName}`,
+              `Not found!`
+            ]
+          );
+        }
+
+        return null;
+      }
+    })
   );
+
+
+  const inquireQueue = cmds.registerCommand('cics-extension-for-zowe.tsq', async () => {
+    const editor = window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+    const selection = editor.selection;
+    const text = editor.document.getText(selection);
+
+    const queueName = text.toUpperCase().replaceAll(" ", "").split("QUEUE(")[1].split(")")[0].replaceAll("'", "").replaceAll("\"", "");
+
+    window.showInformationMessage(`Inquired queue for: ${queueName}`);
+
+    // CMCI Endpoint to get TSQ content
+    const res = await axios.get(`CMCI ENDPOINT /read?queue=${queueName}`);
+
+    if (res.data && res.data.content) {
+      window.showInformationMessage(res.data.content.join(", "));
+    }
+
+
+  });
+  context.subscriptions.push(inquireQueue);
+
+  const updateContextKey = () => {
+    const editor = window.activeTextEditor;
+    if (!editor) {
+      cmds.executeCommand('setContext', 'editorHasWriteQTS', false);
+      return;
+    }
+    const text = editor.document.getText(editor.selection);
+    const hasWriteQTS = text.replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "").includes('TSQUEUE(');
+    cmds.executeCommand('setContext', 'editorHasWriteQTS', hasWriteQTS);
+  };
+
+  window.onDidChangeTextEditorSelection(updateContextKey, null, context.subscriptions);
+  window.onDidChangeActiveTextEditor(updateContextKey, null, context.subscriptions);
+  updateContextKey();
+}
+
+export function deactivate(context: ExtensionContext): void {
+  return;
 }

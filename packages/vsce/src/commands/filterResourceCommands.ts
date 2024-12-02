@@ -16,14 +16,14 @@ import { CICSProgramTree } from "../trees/CICSProgramTree";
 import { CICSTaskTree } from "../trees/CICSTaskTree";
 import { CICSTransactionTree } from "../trees/CICSTransactionTree";
 import { CICSTree } from "../trees/CICSTree";
-import { CICSTCPIPServiceTree } from "../trees/treeItems/web/CICSTCPIPServiceTree";
 import { CICSLibraryDatasets } from "../trees/treeItems/CICSLibraryDatasets";
 import { CICSLibraryTreeItem } from "../trees/treeItems/CICSLibraryTreeItem";
+import { CICSPipelineTree } from "../trees/treeItems/web/CICSPipelineTree";
+import { CICSTCPIPServiceTree } from "../trees/treeItems/web/CICSTCPIPServiceTree";
+import { CICSURIMapTree } from "../trees/treeItems/web/CICSURIMapTree";
+import { CICSWebServiceTree } from "../trees/treeItems/web/CICSWebServiceTree";
 import { getPatternFromFilter } from "../utils/filterUtils";
 import { PersistentStorage } from "../utils/PersistentStorage";
-import { CICSURIMapTree } from "../trees/treeItems/web/CICSURIMapTree";
-import { CICSPipelineTree } from "../trees/treeItems/web/CICSPipelineTree";
-import { CICSWebServiceTree } from "../trees/treeItems/web/CICSWebServiceTree";
 
 export function getFilterLibrariesCommand(tree: CICSTree, treeview: TreeView<any>) {
   return commands.registerCommand("cics-extension-for-zowe.filterLibraries", async (node) => {
@@ -420,3 +420,17 @@ export function getFilterWebServicesCommand(tree: CICSTree, treeview: TreeView<a
     );
   });
 }
+
+export default {
+  getFilterDatasetProgramsCommand,
+  getFilterDatasetsCommand,
+  getFilterLibrariesCommand,
+  getFilterLocalFilesCommand,
+  getFilterPipelinesCommand,
+  getFilterProgramsCommand,
+  getFilterTasksCommand,
+  getFilterTCPIPSCommand,
+  getFilterTransactionCommand,
+  getFilterURIMapsCommand,
+  getFilterWebServicesCommand,
+};

@@ -9,7 +9,7 @@
  *
  */
 
-import { commands, window, WebviewPanel, TreeView } from "vscode";
+import { commands, TreeView, WebviewPanel, window } from "vscode";
 import { CICSRegionTree } from "../trees/CICSRegionTree";
 import { CICSLibraryDatasets } from "../trees/treeItems/CICSLibraryDatasets";
 import { CICSLibraryTreeItem } from "../trees/treeItems/CICSLibraryTreeItem";
@@ -17,7 +17,6 @@ import { CICSLocalFileTreeItem } from "../trees/treeItems/CICSLocalFileTreeItem"
 import { CICSProgramTreeItem } from "../trees/treeItems/CICSProgramTreeItem";
 import { CICSTaskTreeItem } from "../trees/treeItems/CICSTaskTreeItem";
 import { CICSTransactionTreeItem } from "../trees/treeItems/CICSTransactionTreeItem";
-import { CICSTCPIPServiceTree } from "../trees/treeItems/web/CICSTCPIPServiceTree";
 import { CICSPipelineTreeItem } from "../trees/treeItems/web/treeItems/CICSPipelineTreeItem";
 import { CICSTCPIPServiceTreeItem } from "../trees/treeItems/web/treeItems/CICSTCPIPServiceTreeItem";
 import { CICSURIMapTreeItem } from "../trees/treeItems/web/treeItems/CICSURIMapTreeItem";
@@ -347,3 +346,17 @@ export function getShowWebServiceAttributesCommand(treeview: TreeView<any>) {
     }
   });
 }
+
+export default {
+  getShowLibraryAttributesCommand,
+  getShowLibraryDatasetsAttributesCommand,
+  getShowLocalFileAttributesCommand,
+  getShowPipelineAttributesCommand,
+  getShowProgramAttributesCommand,
+  getShowRegionAttributes,
+  getShowTaskAttributesCommand,
+  getShowTCPIPServiceAttributesCommand,
+  getShowTransactionAttributesCommand,
+  getShowURIMapAttributesCommand,
+  getShowWebServiceAttributesCommand,
+};

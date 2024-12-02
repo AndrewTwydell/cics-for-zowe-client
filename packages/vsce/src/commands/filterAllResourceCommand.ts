@@ -238,3 +238,15 @@ export function getFilterAllWebServicesCommand(tree: CICSTree, treeview: TreeVie
     tree._onDidChangeTreeData.fire(undefined);
   });
 }
+
+export default {
+  getFilterAllLibrariesCommand,
+  getFilterAllLocalFilesCommand,
+  getFilterAllPipelinesCommand,
+  getFilterAllProgramsCommand,
+  getFilterAllTasksCommand,
+  getFilterAllTCPIPServicesCommand,
+  getFilterAllTransactionsCommand,
+  getFilterAllURIMapsCommand,
+  getFilterAllWebServicesCommand,
+};

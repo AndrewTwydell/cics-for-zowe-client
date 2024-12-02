@@ -46,6 +46,11 @@
     },
     "commands": [
       {
+        "command": "cics-extension-for-zowe.tsq",
+        "title": "Inquire TSQ",
+        "enablement": "editorHasWriteQTS"
+      },
+      {
         "command": "cics-extension-for-zowe.addSession",
         "title": "Create a CICS Profile",
         "category": "IBM CICS for Zowe Explorer",
@@ -425,6 +430,14 @@
       }
     ],
     "menus": {
+      "editor/context": [
+        {
+          "command": "cics-extension-for-zowe.tsq",
+          "when": "editorHasWriteQTS",
+          "category": "IBM CICS for Zowe Explorer",
+          "group": "navigation"
+        }
+      ],
       "view/title": [
         {
           "command": "cics-extension-for-zowe.refreshTree",
@@ -892,6 +905,7 @@
     "@vscode/vsce": "^2.32.0"
   },
   "dependencies": {
+    "@zowe/cics-for-zowe-cli": "^6.0.0",
     "@zowe/cics-for-zowe-sdk": "6.0.0",
     "@zowe/core-for-zowe-sdk": "^8.0.0",
     "@zowe/zowe-explorer-api": "^3.0.2",

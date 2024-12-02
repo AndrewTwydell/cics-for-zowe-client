@@ -9,6 +9,8 @@
  *
  */
 
+import { ICommandProfileTypeConfiguration } from "@zowe/imperative";
+
 /**
  * Use the index.ts to export any public facing APIs/interfaces/etc.
  *
@@ -20,3 +22,8 @@
  */
 
 export * from "@zowe/cics-for-zowe-sdk";
+
+export const getProfileSchema = () => {
+    const cicsProfile = require("./imperative").profiles as ICommandProfileTypeConfiguration[];
+    return cicsProfile;
+};
